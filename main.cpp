@@ -1,32 +1,22 @@
-#include <iostream>
-#include <SDL2/SDL.h>
+#include "Game.hpp"
 
-const int WIDTH = 800, HEIGHT = 600;
+Game *game = nullptr;
 
-int main (int argc, char *argv[]) {
-    SDL_Init( SDL_INIT_EVERYTHING );
+int main(int argc, char* args[])
+{
+  game = new Game();
 
-    SDL_Window *window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI );
+  game->init("SGD_Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
 
-    if( NULL == window)
-    {
-        std::cout << "Could not create window:" << SDL_GetError( ) << std::endl;
-        return 1;
-    }
+  while(game->running()) {
 
-    SDL_Event windowEvent;
+    game->handleEvents();
+    game->update();
+    game->render();
 
-    while(true) {
-        if(SDL_PollEvent( &windowEvent ))
-        {
-            if(SDL_QUIT == windowEvent.type) {
-                break;
-            }
-        }
-    }
+  }
 
-    SDL_DestroyWindow( window );
+  game->clean();
 
-    SDL_Quit();
-    return EXIT_SUCCESS;
+  return 0;
 }

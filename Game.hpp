@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <iostream>
+#include "TextureManager.hpp"
+
 
 class Game {
 
@@ -14,7 +16,7 @@ public:
     void init(const char* title, int xPosition, int yPosition, int width, int height, bool fullscreen);
     
     void handleEvents();
-    void update();
+    void update(float delta);
     void render();
     void clean();
 

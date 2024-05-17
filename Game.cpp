@@ -1,5 +1,10 @@
 #include "Game.hpp"
 
+SDL_Texture* playerTexture;
+SDL_Rect sourceRect, destRect;
+
+int frame;
+
 Game::Game()
 {
 
@@ -37,6 +42,9 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
         }
 
         isRunning = true;
+
+        playerTexture = TextureManager::LoadTexture("src/assets/player.png", renderer);
+
     } else {
 
         // If SDL doesn't initialize correctly, 
@@ -46,10 +54,22 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
     }
 }
 
-void Game::update() 
-{
-    count++;
-    std::cout << count << std::endl;
+bool done = false;
+
+void Game::update(float delta) {
+
+	if (destRect.x >= 640 && !done) {
+		std::cout << frame << std::endl;
+		done = true;
+	}
+
+	destRect.h = 64;
+	destRect.w = 64;
+	destRect.x = destRect.x + (100*delta);
+
+	frame++;
+
+
 }
 
 void Game::render()
@@ -79,7 +99,7 @@ void Game::clean()
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
-    std::cout << "SDL quitted" << std::endl;
+    std::cout << "SDL quit" << std::endl;
 
 }
 

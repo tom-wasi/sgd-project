@@ -8,6 +8,9 @@ class GameObject
 {
 public:
 	GameObject(const char* texturesheet, float x, float y, int textureWidth = 16, int textureHeight = 16, float textureUpscale = 1.0f);
+	
+	GameObject(SDL_Texture* texture, float x, float y, int textureWidth = 16, int textureHeight = 16, float textureUpscale = 1.0f);
+	
 	~GameObject();
 
 	void update();

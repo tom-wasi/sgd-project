@@ -3,7 +3,7 @@
 
 GameObject::GameObject(const char* texturesheet, float x, float y, int textureWidth, int textureHeight, float textureUpscale) 
     : x(x), y(y), textureWidth(textureWidth), textureHeight(textureHeight), textureUpscale(textureUpscale) {
-    objectTexture = TextureManager::LoadTexture(texturesheet);
+    objectTexture = TextureService::LoadTexture(texturesheet);
     if (objectTexture == nullptr) {
         std::cerr << "Failed to load texture: " << texturesheet << std::endl;
     } else {
@@ -14,6 +14,18 @@ GameObject::GameObject(const char* texturesheet, float x, float y, int textureWi
 	this->textureWidth = textureWidth;
 	this->textureHeight = textureHeight;
 	this->textureUpscale = textureUpscale;
+}
+
+
+GameObject::GameObject(SDL_Texture* texture, float x, float y, int textureWidth, int textureHeight, float textureUpscale) {
+    objectTexture = texture;
+    
+    this->x = x;
+    this->y = y;
+    this->textureWidth = textureWidth;
+    this->textureHeight = textureHeight;
+    this->textureUpscale = textureUpscale;
+
 }
 
 void GameObject::update() {

@@ -60,7 +60,7 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
         isRunning = true;
 
         playerObject = new Player("src/assets/player.png", Game::WIDTH / 2, 200);
-        enemyService = new EnemyService(36);
+        enemyService = new EnemyService(35);
         enemyService->init();
 
     } else {

@@ -1,6 +1,6 @@
-#include "TextureManager.hpp"
+#include "TextureService.hpp"
 
-SDL_Texture* TextureManager::LoadTexture(const char* filename) {
+SDL_Texture* TextureService::LoadTexture(const char* filename) {
     SDL_Surface *imageSurface = IMG_Load(filename);
     if (!imageSurface) {
         std::cout << "IMG_Load Error: " << IMG_GetError() << std::endl;
@@ -12,6 +12,6 @@ SDL_Texture* TextureManager::LoadTexture(const char* filename) {
         std::cout << "CreateTexture Error: " << SDL_GetError() << std::endl;
         return nullptr;
     }
-    std::cout << "Texture loaded successfully: " << filename << std::endl; // Add this line
+    std::cout << "Texture loaded successfully: " << filename << std::endl;
     return texture;
 }

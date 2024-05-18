@@ -12,7 +12,9 @@ class Enemy : public GameObject {
     private :
         float movementSpeed;
         short int direction = 1;
+        short int horizontalMovementCounter = 0;
         const float xStart;
         static const float xTravel;
+        static const int horizontalMovementTriggerCount;
         void move();
 };

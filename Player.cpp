@@ -19,10 +19,12 @@ void Player::update() {
     }
 
     if (Input::GetKeyDown(SDL_SCANCODE_SPACE)) {
+        weapon.Shoot(x+(textureWidth * textureUpscale)/3.5f, y, 0.0f, -100.0f);
         std::cout << "SPACE pressed" << std::endl;
     }
 
     move(xInput);
+    weapon.Update();
     GameObject::update();
 }
 
@@ -36,4 +38,9 @@ void Player::move(float xInput) {
     } else if (x <= 0) {
         x = 0;
     }
+}
+
+void Player::render() {
+    GameObject::render();
+    weapon.Render();
 }

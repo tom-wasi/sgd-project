@@ -4,7 +4,7 @@
 #include "SDL2/SDL_image.h"
 #include "Game.hpp"
 
-class TextureManager
+class TextureService
 {
 public:
 	static SDL_Texture* LoadTexture(const char* filename);

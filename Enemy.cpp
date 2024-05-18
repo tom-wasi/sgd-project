@@ -1,6 +1,7 @@
 #include "Enemy.hpp"
 
 const float Enemy::xTravel = Game::WIDTH/4;
+const int Enemy::horizontalMovementTriggerCount = 3;
 
 Enemy::Enemy(const char* textureSheet, float x, float y) :
     GameObject(textureSheet, x, y, 15, 15, 2.0f), xStart(x) {
@@ -27,7 +28,12 @@ void Enemy::move() {
 	else if (x <= left_limit) {
 		x = left_limit;
 		direction = 1;
+        horizontalMovementCounter++;
+	}
 
+    if (horizontalMovementCounter >= Enemy::horizontalMovementTriggerCount) {
+		y += textureHeight*textureUpscale;
+		horizontalMovementCounter = 0;
 	}
 }
 

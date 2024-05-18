@@ -10,11 +10,12 @@ public:
     Player(const char* texturesheet, float x, float y);
     Weapon weapon;
     void update();
-    void render();
     int getHeight() const { return height; }
 
 private:
     int height;
     float movementSpeed;
     void move(float xInput);
+    Uint16 lastWeaponFire;
+    static int weaponFreezeTime;
 };

@@ -6,11 +6,11 @@ class Weapon {
 
     public:
         Weapon();
-        void Update();
-        void Render();
+        Weapon(int maxProjectiles);
 
-        void Shoot(float x, float y, float xDelta, float yDelta);
+        bool Shoot(float x, float y, float xDelta, float yDelta);
 
     private:
-        std::vector<Projectile> projectiles;
+        std::vector<Projectile*> projectiles;
+        int maxProjectiles;
 };

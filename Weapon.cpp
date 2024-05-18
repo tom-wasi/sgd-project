@@ -1,25 +1,25 @@
 #include "Weapon.hpp"
 
-void Weapon::Shoot(float x, float y, float xDelta, float yDelta) {
+Weapon::Weapon() {
 
-    projectiles.push_back(Projectile(x, y, xDelta, yDelta));
+    this->maxProjectiles = 100;
 
 }
 
-void Weapon::Update() {
+Weapon::Weapon(int maxProjectiles) {
 
-    for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i].update();
+    this->maxProjectiles = maxProjectiles;
+    
+}
+
+bool Weapon::Shoot(float x, float y, float xDelta, float yDelta) {
+
+    if(projectiles.size() < maxProjectiles){
+    Projectile *p = new Projectile(x, y, xDelta, yDelta);
+    projectiles.push_back(p);
+    return true;
+    } else {
+        return false;
     }
 
 }
-
-void Weapon::Render() {
-
-    for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i].render();
-    }
-
-}
-
-Weapon::Weapon() {}

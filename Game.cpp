@@ -18,19 +18,14 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 float Game::deltaTime;
 
-Game::Game()
-{
-    
-}
+Game::Game() {}
 
-Game::~Game() 
-{
-
-}
+Game::~Game() {}
 
 void Game::init(const char *title, int xPosition, int yPosition, int width, int height, bool fullscreen)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
+    
         if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
             std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
             isRunning = false;
@@ -38,7 +33,6 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
         }
 
         lastTicks = SDL_GetTicks();
-        std::cout << "Initialized SDL properly!" << std::endl;
 
         int flags = 0;
         if (fullscreen) {
@@ -46,30 +40,35 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
         }
 
         window = SDL_CreateWindow(title, xPosition, yPosition, width, height, flags);
-
-        if (window) {
-            std::cout << "Window created!" << std::endl;
-        } else {
+        if (!window) {
             std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
             isRunning = false;
             return;
         }
 
+        // SDL_RENDERER_ACCELERATED: this flag indicates that the renderer 
+        // uses hardware acceleration. If you pass this flag,
+        // you’re guaranteed not to get a software renderer
+
+        //SDL_RENDERER_PRESENTVSYNC: This flag indicates that the renderer’s 
+        //presentation is synchronized with the refresh rate2. When VSync 
+        //is enabled, the video card stops the renderer from presenting a 
+        //frame until a signal from the monitor indicating vertical 
+        //synchronization arrives, which means it finished displaying the last frame
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-        isRunning = true;
-
-        playerObject = new Player("src/assets/player.png", Game::WIDTH / 2, 200);
+        const int playerHeight = 64; 
+        const int margin = 10;
+        playerObject = new Player("src/assets/player.png", Game::WIDTH / 2, Game::HEIGHT - playerHeight - margin);
         enemyService = new EnemyService(35);
         enemyService->init();
 
+        isRunning = true;
     } else {
         std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
         isRunning = false;
     }
 }
-
-bool done = false;
 
 void Game::handleEvents()
 {
@@ -93,32 +92,29 @@ void Game::update() {
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), lastTicks + 16));
 	deltaTime = (SDL_GetTicks() - lastTicks)/1000.0f;
 	lastTicks = SDL_GetTicks();
+
 	// Clamp maximum delta time value
 	if (deltaTime > 0.05f)
 	{
 		deltaTime = 0.05f;
 	}
 
-	playerObject->update();
-	enemyService->update();
+    GameObject::UpdateEvery();
 
     frame++;
     
 }
-
 
 void Game::render() {
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    playerObject->render();
-    enemyService->render();
-    
+    GameObject::RenderEvery();
+
     SDL_RenderPresent(renderer);
 
 }
-
 
 void Game::clean(){
 

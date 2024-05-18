@@ -10,13 +10,13 @@ public:
     ~EnemyService();
 
     void init();
-    void update();
+    //void update();
     void render();
 
 private:
     static int maxInXAxis;
     int enemyCount, totalEnemies;
 
-    std::vector<Enemy> enemies;
-    
+    std::vector<Enemy*> enemies;
+
 };

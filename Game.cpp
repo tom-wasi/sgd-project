@@ -3,10 +3,10 @@
 #include "Player.hpp"
 #include "Input.hpp"
 #include "Enemy.hpp"
+#include "EnemyService.hpp"
 
 Player* playerObject;
-Enemy* enemyObject1;
-Enemy* enemyObject2;
+EnemyService* enemyService;
 
 Uint32 lastTicks;
 int frame;
@@ -56,18 +56,13 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
         }
 
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-        if (renderer) {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            std::cout << "Renderer created!" << std::endl;
-        } else {
-            std::cout << "Renderer creation error: " << SDL_GetError() << std::endl;
-        }
 
         isRunning = true;
 
         playerObject = new Player("src/assets/player.png", Game::WIDTH / 2, 200);
-        enemyObject1 = new Enemy("src/assets/enemy.png", Game::WIDTH/2, 20);
-		enemyObject2 = new Enemy("src/assets/enemy.png", Game::WIDTH / 2 + 64, 20);
+        enemyService = new EnemyService(36);
+        enemyService->init();
+
     } else {
         std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
         isRunning = false;
@@ -105,8 +100,7 @@ void Game::update() {
 	}
 
 	playerObject->update();
-	enemyObject1->update();
-    enemyObject2->update();
+	enemyService->update();
 
     frame++;
     
@@ -115,11 +109,11 @@ void Game::update() {
 
 void Game::render() {
 
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
     playerObject->render();
-    enemyObject1->render();
-    enemyObject2->render();
+    enemyService->render();
     
     SDL_RenderPresent(renderer);
 

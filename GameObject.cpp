@@ -1,5 +1,6 @@
 #include "GameObject.hpp"
 
+
 GameObject::GameObject(const char* texturesheet, float x, float y, int textureWidth, int textureHeight, float textureUpscale) 
     : x(x), y(y), textureWidth(textureWidth), textureHeight(textureHeight), textureUpscale(textureUpscale) {
     objectTexture = TextureManager::LoadTexture(texturesheet);
@@ -16,6 +17,7 @@ GameObject::GameObject(const char* texturesheet, float x, float y, int textureWi
 }
 
 void GameObject::update() {
+
     srcRect.w = textureWidth;
     srcRect.h = textureHeight;
     srcRect.x = 0;
@@ -28,6 +30,9 @@ void GameObject::update() {
 
    }
 
+
 void GameObject::render() {
 	SDL_RenderCopy(Game::renderer, objectTexture, &srcRect, &destRect);
 }
+
+GameObject::~GameObject(){}

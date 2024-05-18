@@ -1,9 +1,9 @@
 #include "Enemy.hpp"
 
-const float Enemy::xTravel = Game::WIDTH/3;
+const float Enemy::xTravel = Game::WIDTH/4;
 
 Enemy::Enemy(const char* textureSheet, float x, float y) :
-    GameObject(textureSheet, x, y, 15, 15, 3.0f), xStart(x) {
+    GameObject(textureSheet, x, y, 15, 15, 2.0f), xStart(x) {
         movementSpeed = 100.0f;
 }
 
@@ -29,4 +29,8 @@ void Enemy::move() {
 		direction = 1;
 
 	}
+}
+
+void Enemy::render() {
+    GameObject::render();
 }

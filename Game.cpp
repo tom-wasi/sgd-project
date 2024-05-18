@@ -9,6 +9,9 @@ GameObject* enemyObject;
 Uint32 lastTicks;
 int frame;
 
+const int Game::WIDTH = 640;
+const int Game::HEIGHT = 480;
+
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 float Game::deltaTime;
@@ -23,45 +26,47 @@ Game::~Game()
 
 }
 
-
 void Game::init(const char *title, int xPosition, int yPosition, int width, int height, bool fullscreen)
 {
-   
-
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
+        if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+            std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
+            isRunning = false;
+            return;
+        }
+
         lastTicks = SDL_GetTicks();
         std::cout << "Initialized SDL properly!" << std::endl;
-        
+
         int flags = 0;
         if (fullscreen) {
-           flags = SDL_WINDOW_FULLSCREEN;
+            flags = SDL_WINDOW_FULLSCREEN;
         }
 
         window = SDL_CreateWindow(title, xPosition, yPosition, width, height, flags);
 
         if (window) {
             std::cout << "Window created!" << std::endl;
+        } else {
+            std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
+            isRunning = false;
+            return;
         }
 
-        renderer = SDL_CreateRenderer(window, -1, 0);
-        if(renderer) {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        if (renderer) {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             std::cout << "Renderer created!" << std::endl;
         } else {
-            std::cout << SDL_GetError() << std::endl;
+            std::cout << "Renderer creation error: " << SDL_GetError() << std::endl;
         }
-        
 
         isRunning = true;
 
-        playerObject = new Player("src/player.png", 0, 0);
-        enemyObject = new GameObject("src/enemy.png", 100, 20);
-
+        playerObject = new Player("src/assets/si_player.png", Game::WIDTH / 2, Game::HEIGHT - playerObject->getHeight());
+        enemyObject = new GameObject("src/assets/si_enemy.png", 10, 20, 16, 16, 3.0f);
     } else {
-
-        // If SDL doesn't initialize correctly, 
-        // the bool will be checked in the main
-        // class and the game won't be rendered
+        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
         isRunning = false;
     }
 }
@@ -106,16 +111,17 @@ void Game::update()
     frame++;
 }
 
-void Game::render()
-{
+void Game::render() {
     SDL_RenderClear(renderer);
 
-    playerObject->render();
-    enemyObject->render();
+    if (playerObject && enemyObject) {
+        playerObject->render();
+        enemyObject->render();
+    } else {
+        std::cerr << "Player or Enemy object is null" << std::endl;
+    }
 
     SDL_RenderPresent(renderer);
-
-    
 }
 
 void Game::clean()

@@ -1,16 +1,17 @@
 #include "TextureManager.hpp"
 
 SDL_Texture* TextureManager::LoadTexture(const char* filename) {
-    SDL_Surface* tempSurface = IMG_Load(filename);
-    if (!tempSurface) {
+    SDL_Surface *imageSurface = IMG_Load(filename);
+    if (!imageSurface) {
         std::cout << "IMG_Load Error: " << IMG_GetError() << std::endl;
         return nullptr;
     }
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, tempSurface);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, imageSurface);
+    SDL_FreeSurface(imageSurface);
     if (!texture) {
         std::cout << "CreateTexture Error: " << SDL_GetError() << std::endl;
         return nullptr;
     }
-    SDL_FreeSurface(tempSurface);
+    std::cout << "Texture loaded successfully: " << filename << std::endl; // Add this line
     return texture;
 }

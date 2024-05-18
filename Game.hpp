@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "TextureManager.hpp"
+#include "SDL2/SDL_image.h"
 
 class Game
 {
@@ -18,6 +19,8 @@ class Game
 		void clean();
 
 		bool running() { return isRunning; }
+		
+		const static int WIDTH, HEIGHT;
 
 		static SDL_Renderer* renderer;
 		static SDL_Event event;

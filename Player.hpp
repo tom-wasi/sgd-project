@@ -8,6 +8,10 @@ public:
     Player(const char* texturesheet, float x, float y);
 
     void update();
+    int getHeight() const { return height; }
+
 private:
+    int height;
     float movementSpeed;
+    void move(float xInput);
 };

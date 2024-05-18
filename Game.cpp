@@ -2,15 +2,17 @@
 #include "GameObject.hpp"
 #include "Player.hpp"
 #include "Input.hpp"
+#include "Enemy.hpp"
 
 Player* playerObject;
-GameObject* enemyObject;
+Enemy* enemyObject1;
+Enemy* enemyObject2;
 
 Uint32 lastTicks;
 int frame;
 
-const int Game::WIDTH = 640;
-const int Game::HEIGHT = 480;
+const int Game::WIDTH = 820;
+const int Game::HEIGHT = 640;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -63,8 +65,9 @@ void Game::init(const char *title, int xPosition, int yPosition, int width, int 
 
         isRunning = true;
 
-        playerObject = new Player("src/assets/si_player.png", Game::WIDTH / 2, Game::HEIGHT - playerObject->getHeight());
-        enemyObject = new GameObject("src/assets/si_enemy.png", 10, 20, 16, 16, 3.0f);
+        playerObject = new Player("src/assets/player.png", Game::WIDTH / 2, 200);
+        enemyObject1 = new Enemy("src/assets/enemy.png", Game::WIDTH/2, 20);
+		enemyObject2 = new Enemy("src/assets/enemy.png", Game::WIDTH / 2 + 64, 20);
     } else {
         std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
         isRunning = false;
@@ -89,11 +92,10 @@ void Game::handleEvents()
     }
 }
 
-void Game::update() 
-{
+void Game::update() {
+
     // Wait until 16ms has elapsed since last frame
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), lastTicks + 16))
-		;
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), lastTicks + 16));
 	deltaTime = (SDL_GetTicks() - lastTicks)/1000.0f;
 	lastTicks = SDL_GetTicks();
 	// Clamp maximum delta time value
@@ -102,31 +104,32 @@ void Game::update()
 		deltaTime = 0.05f;
 	}
 
-    if(playerObject == nullptr && enemyObject == nullptr) {
-    std::cout << "Player and enemy are nullptr!" << std::endl;
-    } else {
 	playerObject->update();
-	enemyObject->update();
-    } 
+	enemyObject1->update();
+    enemyObject2->update();
+
     frame++;
+    
 }
+
 
 void Game::render() {
+
     SDL_RenderClear(renderer);
 
-    if (playerObject && enemyObject) {
-        playerObject->render();
-        enemyObject->render();
-    } else {
-        std::cerr << "Player or Enemy object is null" << std::endl;
-    }
-
+    playerObject->render();
+    enemyObject1->render();
+    enemyObject2->render();
+    
     SDL_RenderPresent(renderer);
+
 }
 
-void Game::clean()
-{
+
+void Game::clean(){
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
 }

@@ -1,13 +1,21 @@
 #pragma once
 #include "GameObject.hpp"
 
+class Weapon;
 class Enemy : public GameObject {
 
     public :
-        Enemy(const char* textureSheet, float x, float y);
+        int enemyPosX, enemyPosY;
+        Weapon* weapon;
+        bool canShoot = false;
 
-        void update();
-        void render();
+        Enemy(const char *textureSheet, float x, float y);
+
+        void Update();
+        void Render();
+
+        void Destroy();
+        void TryShooting();
 
     private :
         float movementSpeed;
@@ -16,5 +24,6 @@ class Enemy : public GameObject {
         const float xStart;
         static const float xTravel;
         static const int horizontalMovementTriggerCount;
-        void move();
+        void Move();
+        Uint16 lastWeaponFire;
 };

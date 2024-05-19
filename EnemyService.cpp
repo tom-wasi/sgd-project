@@ -1,6 +1,11 @@
 #include "EnemyService.hpp"
+#include "Weapon.hpp"
+#include "Projectile.hpp"
 
 int EnemyService::maxInXAxis = 7;
+int EnemyService::enemyShootingChance = 2;
+int EnemyService::enemyShootingInterval = 200;
+float EnemyService::enemyProjectileSpeed = 300.0f;
 
 
 EnemyService::EnemyService(int totalEnemies){
@@ -36,7 +41,13 @@ void EnemyService::init(){
         const int yInit = 42 + (currentLayer * 42);
 
         // create a new enemy and add it to the list of enemies
-        enemies.push_back(new Enemy("src/assets/enemy.png", xInit, yInit));
+        Enemy* enemy = new Enemy("src/assets/enemy.png", xInit, yInit);
+        enemies.push_back(enemy);
+        enemy->enemyPosX = countInCurrentLayer;
+        enemy->enemyPosY = currentLayer;
+        if (currentLayer == totalLayer) {
+            enemy->canShoot = true;
+        }
         countInCurrentLayer++;
     }
 }

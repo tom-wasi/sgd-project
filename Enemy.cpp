@@ -1,4 +1,6 @@
 #include "Enemy.hpp"
+#include "Weapon.hpp"
+#include "EnemyService.hpp"
 
 // The maximum distance the enemy can travel horizontally
 const float Enemy::xTravel = Game::WIDTH/4;
@@ -12,16 +14,21 @@ Enemy::Enemy(const char* textureSheet, float x, float y) :
         movementSpeed = 100.0f; // the speed at which the enemy moves
         GameObject::SetCollisionBox(textureHeight * textureUpscale, textureWidth * textureUpscale); // Setting the collision box for the enemy
         GameObject::RegisterGameObject(this); 
+        weapon = new Weapon(100, Projectile::ProjectileType::ENEMY_PROJECTILE);
+        lastWeaponFire = 0;
 }
 
 
-void Enemy::update() {
-    move(); 
+void Enemy::Update() {
+    Move(); 
     GameObject::update();
-}
+    if (canShoot && SDL_GetTicks() > lastWeaponFire + EnemyService::enemyShootingInterval) {
+            TryShooting();
+    }
+} 
 
 
-void Enemy::move() {
+void Enemy::Move() {
     x += direction * movementSpeed * Game::deltaTime;
 
     // calculate the right and left limits for the enemy's movement
@@ -47,6 +54,22 @@ void Enemy::move() {
 	}
 }
 
-void Enemy::render() {
+void Enemy::Destroy()
+{
+    hasCollision = false;
+    GameObject::DestroyGameObject(this);
+}
+
+void Enemy::TryShooting()
+{
+    int rng = rand() % 2;
+    if (rng < EnemyService::enemyShootingChance) {
+        weapon->Shoot(x, y + (textureHeight * textureUpscale) + 1.0, 0.0f, EnemyService::enemyProjectileSpeed);
+    }
+    
+    lastWeaponFire = SDL_GetTicks();
+}
+
+void Enemy::Render() {
     GameObject::render();
 }

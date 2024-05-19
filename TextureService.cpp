@@ -13,6 +13,7 @@ SDL_Texture* TextureService::LoadTexture(const char* filename) {
         std::cout << "CreateTexture Error: " << SDL_GetError() << std::endl;
         return nullptr;
     }
+    
     //std::cout << "Texture loaded successfully: " << filename << std::endl;
     return texture;
 

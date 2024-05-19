@@ -31,7 +31,7 @@ void Player::update() {
     }
 
     if (Input::GetKeyDown(SDL_SCANCODE_SPACE) && (SDL_GetTicks() > lastWeaponFire + Player::weaponFreezeTime)) {
-        weapon.Shoot(x+(textureWidth * textureUpscale)/4.0f, y, 0.0f, -100.0f);
+        weapon.Shoot(x+(textureWidth * textureUpscale)/4.0f, y - (textureHeight * textureUpscale)/2, 0.0f, -100.0f);
         lastWeaponFire = SDL_GetTicks();
         //std::cout << "SPACE detected" << std::endl;
     }

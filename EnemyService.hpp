@@ -6,11 +6,13 @@
 
 class EnemyService {
 public:
+    static int enemyShootingChance;
+    static float enemyProjectileSpeed;
+    static int enemyShootingInterval;
     EnemyService(int totalEnemies);
     ~EnemyService();
 
     void init();
-    //void update();
     void render();
 
 private:
